@@ -1,2 +1,2 @@
 # DisMAL.js
-DisMAL (Dissonance Modeling and Analysis Library) for typescript
+DisMAL (Dissonance Modeling and Analysis Library) for JS/TS
