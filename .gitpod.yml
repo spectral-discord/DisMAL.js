@@ -1,2 +1,2 @@
 tasks:
-  - init: ./scripts/gitpod-start.sh
+  - command: ./scripts/gitpod-start.sh

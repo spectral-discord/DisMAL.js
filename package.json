@@ -1,5 +1,5 @@
 {
-  "name": "@spectral-discord/dismal",
+  "name": "dismal",
   "version": "0.0.1",
   "description": "Dissonance Modeling and Analysis Library",
   "main": "index.js",
