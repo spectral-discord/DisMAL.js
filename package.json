@@ -1,0 +1,9 @@
+{
+  "name": "@spectral-discord/dismal",
+  "version": "0.0.1",
+  "description": "Dissonance Modeling and Analysis Library",
+  "main": "index.js",
+  "repository": "git://github.com/spectral-discord/DisMAL.js.git",
+  "author": "Lina",
+  "license": "Unlicense"
+}
