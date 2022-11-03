@@ -3,11 +3,11 @@
   "version": "0.0.2",
   "description": "Dissonance Modeling and Analysis Library",
   "main": "dist/bundle.cjs.js",
+  "module": "dist/bundle.es.js",
+  "types": "dist/bundle.d.ts",
   "repository": "https://github.com/spectral-discord/dismal.js",
   "author": "Lina <git@lina.pizza>",
   "license": "Unlicense",
-  "module": "dist/bundle.es.js",
-  "types": "dist/bundle.d.ts",
   "scripts": {
     "build": "tsc && yarn rollup -c",
     "lint": "eslint src --fix",
