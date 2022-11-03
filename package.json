@@ -1,9 +1,40 @@
 {
   "name": "dismal",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Dissonance Modeling and Analysis Library",
-  "main": "index.js",
-  "repository": "git://github.com/spectral-discord/DisMAL.js.git",
-  "author": "Lina",
-  "license": "Unlicense"
+  "main": "dist/bundle.cjs.js",
+  "repository": "https://github.com/spectral-discord/dismal.js",
+  "author": "Lina <git@lina.pizza>",
+  "license": "Unlicense",
+  "module": "dist/bundle.es.js",
+  "types": "dist/bundle.d.ts",
+  "scripts": {
+    "build": "tsc && yarn rollup -c",
+    "lint": "eslint src --fix",
+    "test": "jest --config jest.config.ts",
+    "preversion": "yarn test && yarn lint",
+    "prepublishOnly": "yarn test && yarn lint",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^29.2.1",
+    "@types/node": "^18.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.26.0",
+    "husky": "^8.0.1",
+    "jest": "^29.2.2",
+    "lint-staged": "^13.0.3",
+    "rollup": "^3.2.5",
+    "rollup-plugin-dts": "^5.0.0",
+    "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  }
 }
