@@ -59,7 +59,10 @@ export abstract class SpectralInterferenceModel extends Model {
 
         partials?.forEach((partial, partialIndex) => {
           if (partial.ratio && partial.weight) {
-            // Calculate the interference of the partial itself
+            /**
+             * Calculate the interference of the partial
+             * against the subsequent partials in the tone
+             */
             for (
               let nextPartial = partialIndex + 1;
               nextPartial < partials.length;
@@ -67,6 +70,7 @@ export abstract class SpectralInterferenceModel extends Model {
             ) {
               const nextRatio = partials[nextPartial].ratio;
               const nextWeight = partials[nextPartial].weight;
+
               if (nextRatio && nextWeight) {
                 partialInterferences.push(this.calculateInterference(
                   {
@@ -81,7 +85,10 @@ export abstract class SpectralInterferenceModel extends Model {
               }
             }
 
-            // Calculate the interference of the tone against all other tones
+            /**
+             * Calculate the interference of the partial 
+             * against all subsequent tones' partials
+             */
             for (
               let nextTone = toneIndex + 1;
               nextTone < tones.length;
@@ -93,6 +100,7 @@ export abstract class SpectralInterferenceModel extends Model {
                 for (let nextPartial = 0; nextPartial < nextTonePartials.length; ++nextPartial) {
                   const nextRatio = nextTonePartials[nextPartial].ratio;
                   const nextWeight = nextTonePartials[nextPartial].weight;
+
                   if (nextRatio && nextWeight) {
                     partialInterferences.push(this.calculateInterference(
                       {
