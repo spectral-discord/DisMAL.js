@@ -114,6 +114,6 @@ export abstract class SpectralInterferenceModel extends Model {
     });
 
     return Promise.all(partialInterferences)
-      .then(interferences => interferences.reduce((acc: number, val: number) => acc + val, 0));
+      .then(interferences => interferences.reduce((acc, val) => acc + val, 0));
   }
 }
