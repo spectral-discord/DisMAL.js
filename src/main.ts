@@ -1,6 +1,9 @@
 'use strict';
 
-export function greeting() {
-  console.log('Hello World!');
-  return 'Hello World!';
-}
+import SetharesModel from './models/sethares';
+import VassilakisModel from './models/vassilakis';
+import processMap from './map';
+
+export { SetharesModel };
+export { VassilakisModel };
+export { processMap };
