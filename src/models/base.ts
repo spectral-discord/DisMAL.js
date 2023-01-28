@@ -1,17 +1,6 @@
 'use strict';
 
-import { TSON, Spectrum, reduce } from 'tsonify';
-
-export interface Tone {
-  spectrum: Spectrum,
-  frequency: number,
-  amplitudeMultiplier?: number,
-}
-
-export interface Partial {
-  ratio: number,
-  weight: number
-}
+import { Tone, Partial, validateAndReduceTones } from '../utils';
 
 /**
  * This is an abstract class that psychoacoustic
@@ -52,28 +41,16 @@ export abstract class SpectralInterferenceModel extends Model {
 
   async process(tones: Tone[]): Promise<number> {
     // Validate & reduce the spectra
-    const reducedTones = tones.map(tone => {
-      const tson = reduce(new TSON({ spectra: [ tone.spectrum ] }));
-      return {
-        ...(tson.spectra?[0] && { spectrum: tson.spectra[0] } : undefined),
-        frequency: tone.frequency,
-        amplitudeMultiplier: tone.amplitudeMultiplier
-      };
-    });
-
+    const reducedTones = validateAndReduceTones(tones);
     const partialInterferences: Promise<number>[] = [];
 
     reducedTones.forEach((tone, toneIndex) => {
-      tone.spectrum?.partials?.forEach((partial, partialIndex) => {
+      tone.spectrum.partials.forEach((partial, partialIndex) => {
         /**
          * Calculate the interference of the current partial
          * against all subsequent partials in the tone
          */
-        tone.spectrum?.partials?.slice(partialIndex + 1).forEach(nextPartial => {
-          if (!partial.ratio || !partial.weight || !nextPartial.ratio || !nextPartial.weight) {
-            return;
-          }
-
+        tone.spectrum.partials.slice(partialIndex + 1).forEach(nextPartial => {
           partialInterferences.push(this.calculateInterference(
             {
               ratio: partial.ratio * tone.frequency,
@@ -91,11 +68,7 @@ export abstract class SpectralInterferenceModel extends Model {
          * against all partials of subsequent tones
          */
         reducedTones.slice(toneIndex + 1).forEach(nextTone => {
-          nextTone.spectrum?.partials?.forEach(nextPartial => {
-            if (!partial.ratio || !partial.weight || !nextPartial.ratio || !nextPartial.weight) {
-              return;
-            }
-
+          nextTone.spectrum.partials.forEach(nextPartial => {
             partialInterferences.push(this.calculateInterference(
               {
                 ratio: partial.ratio * tone.frequency,

@@ -24,7 +24,7 @@ export default async function processMap(
   tones: Tone[],
   mapOptions: MapOptions
 ): Promise<number[]> {
-  await Joi.assert(mapOptions, MapOptionsValidation);
+  Joi.assert(mapOptions, MapOptionsValidation);
 
   const {
     startFrequency,
