@@ -1,6 +1,6 @@
 {
   "name": "dismal",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Dissonance Modeling and Analysis Library",
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.es.js",
