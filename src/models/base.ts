@@ -1,6 +1,7 @@
 'use strict';
 
-import { Tone, Partial, validateAndReduceTones } from '../utils';
+import { Tone, validateAndReduceTones } from '../utils';
+import { ReducedPartial } from 'tsonify';
 
 /**
  * This is an abstract class that psychoacoustic
@@ -37,7 +38,7 @@ export abstract class SpectralInterferenceModel extends Model {
     this.type = 'Abstract';
   }
 
-  abstract calculateInterference(partial1: Partial, partial2: Partial): Promise<number>;
+  abstract calculateInterference(partial1: ReducedPartial, partial2: ReducedPartial): Promise<number>;
 
   async process(tones: Tone[]): Promise<number> {
     // Validate & reduce the spectra

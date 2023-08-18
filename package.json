@@ -38,6 +38,6 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "tsonify": "^0.2.2"
+    "tsonify": "^0.2.7"
   }
 }

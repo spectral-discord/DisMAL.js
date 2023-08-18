@@ -3142,10 +3142,10 @@ tslib@^2.1.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.1.tgz#0d0bfbaac2880b91e22df0768e55be9753a5b17e"
   integrity sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==
 
-tsonify@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/tsonify/-/tsonify-0.2.2.tgz#ce67883d474f8b5577ca3955c3868f83fea7b8e9"
-  integrity sha512-P2gt3A/C3Hwt1IDAM3vLrySKVGFcNXOzjeutel+lztt2UEbuiBGoKguYmg6d2Nt4lVPOfrquBj2GRiXQ6foQTw==
+tsonify@^0.2.7:
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/tsonify/-/tsonify-0.2.7.tgz#9c22e42deb09851ce04f608d137602f45d7c80ed"
+  integrity sha512-OkDJqx7Ei7m1SflXAPdGwueC3FiEOEU7oPuv/uPKW3pMy0AC6l/ujsDD6Wx37EJRT+2nbYcXjMsia3NWH5gKlw==
   dependencies:
     "@types/joi" "^17.2.3"
     "@types/mathjs" "^9.4.2"

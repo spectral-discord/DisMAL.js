@@ -1,6 +1,7 @@
 'use strict';
 
-import { Model, Tone } from './models/base';
+import { Model } from './models/base';
+import { Tone } from './utils';
 import * as Joi from 'joi';
 
 interface MapOptions {

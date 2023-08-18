@@ -1,6 +1,7 @@
 'use strict';
 
-import { SpectralInterferenceModel, Partial } from './base';
+import { SpectralInterferenceModel } from './base';
+import { ReducedPartial } from 'tsonify';
 
 /**
  * A spectral interference model published by
@@ -20,8 +21,8 @@ export default class VassilakisModel extends SpectralInterferenceModel {
   }
 
   async calculateInterference(
-    partial1: Partial,
-    partial2: Partial
+    partial1: ReducedPartial,
+    partial2: ReducedPartial
   ): Promise<number> {
     const curveInterp = 0.24 / (0.0207 * Math.min(partial1.ratio, partial2.ratio) + 18.96);
     const freqDiff = Math.abs(partial1.ratio - partial2.ratio);
