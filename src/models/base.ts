@@ -1,7 +1,7 @@
 'use strict';
 
-import { Tone, validateAndReduceTones } from '../utils';
-import { ReducedPartial } from 'tsonify';
+import { ReducedTonePartial } from '../utils';
+import { Preprocessor } from '../preprocessors/base';
 
 /**
  * This is an abstract class that psychoacoustic
@@ -18,7 +18,10 @@ export abstract class Model {
     this.type = 'Abstract';
   }
 
-  abstract process(chord: Tone[]): Promise<number>;
+  abstract process(
+    partials: ReducedTonePartial[], 
+    preprocessors?: Preprocessor[]
+  ): Promise<number>;
 }
 
 /**
@@ -38,50 +41,30 @@ export abstract class SpectralInterferenceModel extends Model {
     this.type = 'Abstract';
   }
 
-  abstract calculateInterference(partial1: ReducedPartial, partial2: ReducedPartial): Promise<number>;
+  abstract calculateInterference(
+    partial1: ReducedTonePartial,
+    partial2: ReducedTonePartial
+  ): Promise<number>;
 
-  async process(tones: Tone[]): Promise<number> {
-    // Validate & reduce the spectra
-    const reducedTones = validateAndReduceTones(tones);
+  async process(
+    partials: ReducedTonePartial[],
+    preprocessors?: Preprocessor[]
+  ): Promise<number> {
     const partialInterferences: Promise<number>[] = [];
 
-    reducedTones.forEach((tone, toneIndex) => {
-      tone.spectrum.partials.forEach((partial, partialIndex) => {
-        /**
-         * Calculate the interference of the current partial
-         * against all subsequent partials in the tone
-         */
-        tone.spectrum.partials.slice(partialIndex + 1).forEach(nextPartial => {
-          partialInterferences.push(this.calculateInterference(
-            {
-              ratio: partial.ratio * tone.frequency,
-              weight: partial.weight * (tone.amplitudeMultiplier || 1)
-            },
-            {
-              ratio: nextPartial.ratio * tone.frequency,
-              weight: nextPartial.weight * (tone.amplitudeMultiplier || 1)
-            }
-          ));
-        });
+    if (preprocessors) {
+      for (let j = 0; j < preprocessors?.length; ++j) {
+        partials = preprocessors[j].process(partials);
+      }
+    }
 
-        /**
-         * Calculate the interference of the current partial 
-         * against all partials of subsequent tones
-         */
-        reducedTones.slice(toneIndex + 1).forEach(nextTone => {
-          nextTone.spectrum.partials.forEach(nextPartial => {
-            partialInterferences.push(this.calculateInterference(
-              {
-                ratio: partial.ratio * tone.frequency,
-                weight: partial.weight * (tone.amplitudeMultiplier || 1)
-              },
-              {
-                ratio: nextPartial.ratio * nextTone.frequency,
-                weight: nextPartial.weight * (nextTone.amplitudeMultiplier || 1)
-              }
-            ));
-          });
-        });
+    partials.forEach((partial, partialIndex) => {
+      /**
+       * Calculate the interference of the current partial
+       * against all subsequent partials
+       */
+      partials.slice(partialIndex + 1).forEach(nextPartial => {
+        partialInterferences.push(this.calculateInterference(partial, nextPartial));
       });
     });
 

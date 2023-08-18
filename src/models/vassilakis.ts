@@ -1,7 +1,7 @@
 'use strict';
 
 import { SpectralInterferenceModel } from './base';
-import { ReducedPartial } from 'tsonify';
+import { ReducedTonePartial } from '../utils';
 
 /**
  * A spectral interference model published by
@@ -21,14 +21,14 @@ export default class VassilakisModel extends SpectralInterferenceModel {
   }
 
   async calculateInterference(
-    partial1: ReducedPartial,
-    partial2: ReducedPartial
+    partial1: ReducedTonePartial,
+    partial2: ReducedTonePartial
   ): Promise<number> {
-    const curveInterp = 0.24 / (0.0207 * Math.min(partial1.ratio, partial2.ratio) + 18.96);
-    const freqDiff = Math.abs(partial1.ratio - partial2.ratio);
+    const curveInterp = 0.24 / (0.0207 * Math.min(partial1.frequency, partial2.frequency) + 18.96);
+    const freqDiff = Math.abs(partial1.frequency - partial2.frequency);
 
-    return Math.pow(partial1.weight * partial2.weight, 0.1)
-      * (0.5 * Math.pow(2 * Math.min(partial1.weight, partial1.weight) / (partial1.weight + partial2.weight), 3.11))
+    return Math.pow(partial1.amplitude * partial2.amplitude, 0.1)
+      * (0.5 * Math.pow(2 * Math.min(partial1.amplitude, partial1.amplitude) / (partial1.amplitude + partial2.amplitude), 3.11))
       * ((5 * Math.exp(-3.51 * curveInterp * freqDiff)) + (-5 * Math.exp(-5.75 * curveInterp * freqDiff)));
   }
 }

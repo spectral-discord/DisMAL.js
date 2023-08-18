@@ -1,6 +1,6 @@
 'use strict';
 
-import { Tone } from '../utils';
+import { ReducedTonePartial } from '../utils';
 
 /**
  * This is an abstract class that all
@@ -17,5 +17,5 @@ export abstract class Preprocessor {
     this.type = 'Abstract';
   }
 
-  abstract process(chord: Tone[], options: object): Promise<Tone[]>;
+  abstract process(partials: ReducedTonePartial[]): ReducedTonePartial[];
 }

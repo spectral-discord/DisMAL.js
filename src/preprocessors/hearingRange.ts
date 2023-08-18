@@ -1,6 +1,6 @@
 'use strict';
 
-import { Tone, validateAndReduceTones } from '../utils';
+import { ReducedTonePartial } from '../utils';
 import { Preprocessor } from './base';
 
 interface HearingRangeOptions {
@@ -12,30 +12,25 @@ interface HearingRangeOptions {
  * A preprocessor that removes partials that
  * fall outside of a provided hearing range.
  */
-export abstract class HearingRange extends Preprocessor {
+export default class HearingRange extends Preprocessor {
   readonly name;
   readonly description;
   readonly type;
+  readonly options: HearingRangeOptions;
 
-  constructor() {
+  constructor(options: HearingRangeOptions) {
     super();
 
     this.name = 'Hearing Range';
     this.description = 'Removes partials that fall outside of a provided hearing range.';
     this.type = 'Hearing Range';
+    this.options = options;
   }
 
-  async process(chord: Tone[], options: HearingRangeOptions): Promise<Tone[]> {
-    const reducedTones = validateAndReduceTones(chord);
-
-    reducedTones.forEach(tone => {
-      const rootFreq = tone.frequency;
-      tone.spectrum.partials = tone.spectrum.partials.filter(partial => {
-        return partial.ratio * rootFreq >= (options.minFrequency || 20) 
-          && partial.ratio * rootFreq <= (options.maxFrequency || 20000);
-      });
-    });
-
-    return reducedTones;
+  process(partials: ReducedTonePartial[]): ReducedTonePartial[] {
+    return partials.filter(partial => (
+      partial.frequency >= (this.options.minFrequency || 20) &&
+      partial.frequency <= (this.options.maxFrequency || 20000)
+    ));
   }
 }

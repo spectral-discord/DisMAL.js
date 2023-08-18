@@ -1,7 +1,8 @@
 'use strict';
 
 import { Model } from './models/base';
-import { Tone } from './utils';
+import { Preprocessor } from './preprocessors/base';
+import { reduceTones, Tone } from './utils';
 import * as Joi from 'joi';
 
 interface MapOptions {
@@ -9,7 +10,8 @@ interface MapOptions {
   endRatio: number,
   numSteps: number,
   varId: string,
-  logarithmicSteps?: boolean
+  logarithmicSteps?: boolean,
+  preprocessors?: Preprocessor[]
 }
 
 const MapOptionsValidation = Joi.object().keys({
@@ -17,7 +19,10 @@ const MapOptionsValidation = Joi.object().keys({
   endRatio: Joi.number().min(1).required(),
   numSteps: Joi.number().integer().min(0).required(),
   varId: Joi.string().required(),
-  logarithmicSteps: Joi.boolean().optional()
+  logarithmicSteps: Joi.boolean().optional(),
+  preprocessors: Joi.array().items(Joi.object().keys({
+    process: Joi.function().required()
+  })).optional()
 });
 
 export default async function processMap(
@@ -32,7 +37,8 @@ export default async function processMap(
     endRatio,
     numSteps,
     varId,
-    logarithmicSteps
+    logarithmicSteps,
+    preprocessors
   } = mapOptions;
 
   const varIndex = tones.findIndex(tone => tone.spectrum.id === varId);
@@ -46,15 +52,22 @@ export default async function processMap(
     : (endRatio * startFrequency - startFrequency) / (numSteps - 1);
 
   const promises: Promise<number>[] = [];
+  const partials = reduceTones(tones);
 
   for (let i = 0; i < numSteps; ++i) {
     tones[varIndex].frequency = logarithmicSteps
       ? startFrequency * Math.pow(stepSize, i)
       : startFrequency + stepSize * i;
-    
-    // TODO: Add preprocessors here
-    
-    promises.push(model.process(tones));
+
+    let stepPartials = partials;
+
+    if (preprocessors) {
+      for (let j = 0; j < preprocessors?.length; ++j) {
+        stepPartials = preprocessors[j].process(stepPartials);
+      }
+    }
+        
+    promises.push(model.process(stepPartials, preprocessors));
   }
 
   return Promise.all(promises);
