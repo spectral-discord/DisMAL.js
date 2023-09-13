@@ -1,6 +1,6 @@
 'use strict';
 
-import { TSON, Spectrum, reduce } from 'tsonify';
+import { TSON, Spectrum } from 'tsonify';
 
 export interface Tone {
   spectrum: Spectrum,
@@ -16,8 +16,7 @@ export interface ReducedTonePartial {
 
 export function reduceTones(tones: Tone[]): ReducedTonePartial[] {
   return tones.reduce((agg: ReducedTonePartial[], tone) => {
-    const tson = new TSON({ spectra: [ tone.spectrum ] });
-    const reducedTson = reduce(tson);
+    const reducedTson = new TSON({ spectra: [ tone.spectrum ] }).getReduced();
     const spectrum = reducedTson.spectra?.[0];
 
     if (spectrum) {

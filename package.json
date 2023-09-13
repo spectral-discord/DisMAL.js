@@ -1,6 +1,6 @@
 {
   "name": "dismal",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Dissonance Modeling and Analysis Library",
   "main": "dist/bundle.cjs.js",
   "module": "dist/bundle.es.js",
@@ -38,6 +38,6 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "tsonify": "^0.2.7"
+    "tsonify": "^0.2.9"
   }
 }
